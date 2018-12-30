@@ -18,16 +18,29 @@ class Concentration {
             let card = Card()
             cards += [card, card]
         }
+        cards.shuffle()
     }
     
     func chooseCard(at index: Int) {
+        if (cards[index].isMatched) {
+            return
+        }
+        
         if indexOfFaceUpCard != nil { // when one card is flipped
-            // check for match and handle accordingly
+            cards[index].isFaceUp = true
+            if (cards[index].uuid == cards[indexOfFaceUpCard!].uuid) {
+                cards[index].isMatched = true
+                cards[indexOfFaceUpCard!].isMatched = true
+            }
+            indexOfFaceUpCard = nil
         } else { // when two cards are flipped or none
             for i in cards.indices {
                 cards[i].isFaceUp = false
             }
             cards[index].isFaceUp = true
+            indexOfFaceUpCard = index
         }
     }
+    
+    
 }

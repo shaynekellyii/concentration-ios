@@ -10,16 +10,17 @@ import UIKit
 
 class ConcentrationViewController: UIViewController {
 
-    var flipCount = 0
-    var game = Concentration(numberOfCardPairs: 6)
+    lazy var game = Concentration(numberOfCardPairs: (cardButtons.count + 1) / 2)
+    var emojiChoices = ["😂", "😭", "☺️", "😜", "😤", "😔"]
+    var cardEmojis = [Int:String]()
+    var flipCount = 0 { didSet { flipLabel.text = "Flips: \(flipCount)" } }
     
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var flipLabel: UILabel!
     
     @IBAction func touchCard(_ sender: UIButton) {
         flipCount += 1
-        flipLabel.text = "Flips: \(flipCount)"
-        if let buttonIndex = cardButtons.firstIndex(of: sender) {
+        if let buttonIndex = cardButtons.index(of: sender) {
             game.chooseCard(at: buttonIndex)
             updateViewFromModel()
         }
@@ -28,8 +29,21 @@ class ConcentrationViewController: UIViewController {
     func updateViewFromModel() {
         for (i, cardButton) in cardButtons.enumerated() {
             let card = game.cards[i]
-            cardButton.setTitle(card.isFaceUp ? "?" : "", for: UIControl.State.normal)
-            cardButton.backgroundColor = card.isFaceUp ? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+            cardButton.setTitle(card.isFaceUp ? getCardEmoji(for: card) : "", for: UIControl.State.normal)
+            if (card.isFaceUp) {
+                cardButton.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.937254902, blue: 0.9568627451, alpha: 1)
+            } else {
+                cardButton.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0) : #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+            }
+            
         }
+    }
+    
+    func getCardEmoji(for card: Card) -> String {
+        if cardEmojis[card.uuid] == nil, emojiChoices.count > 0 {
+            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count)))
+            cardEmojis[card.uuid] = emojiChoices.remove(at: randomIndex)
+        }
+        return cardEmojis[card.uuid] ?? "?"
     }
 }
