@@ -9,12 +9,18 @@
 import Foundation
 
 struct Card {
-    var isFlippedUp = false
+    var isFaceUp = false
     var isMatched = false
     var uuid: Int
+    static var currentUuid = 0
     
-    static func getUuid() {
-        
+    init() {
+        self.uuid = Card.getUuid()
+    }
+    
+    static func getUuid() -> Int {
+        currentUuid += 1
+        return currentUuid
     }
     
 }

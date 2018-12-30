@@ -15,12 +15,19 @@ class Concentration {
     
     init(numberOfCardPairs: Int) {
         for _ in 0..<numberOfCardPairs {
-//            let card = Card()
-//            cards += [card, card]
+            let card = Card()
+            cards += [card, card]
         }
     }
     
     func chooseCard(at index: Int) {
-        
+        if indexOfFaceUpCard != nil { // when one card is flipped
+            // check for match and handle accordingly
+        } else { // when two cards are flipped or none
+            for i in cards.indices {
+                cards[i].isFaceUp = false
+            }
+            cards[index].isFaceUp = true
+        }
     }
 }
