@@ -11,7 +11,7 @@ import UIKit
 class ConcentrationViewController: UIViewController {
 
     lazy var game = Concentration(numberOfCardPairs: (cardButtons.count + 1) / 2)
-    var emojiChoices = ["😂", "😭", "☺️", "😜", "😤", "😔"]
+    var emojiChoices = ["😂", "😭", "☺️", "😜", "😤", "😔", "😀", "😩", "😇", "😘", "🤪", "😱"]
     var cardEmojis = [Int:String]()
     var flipCount = 0 { didSet { flipLabel.text = "Flips: \(flipCount)" } }
     
